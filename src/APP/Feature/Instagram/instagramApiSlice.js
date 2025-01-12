@@ -18,3 +18,13 @@ export const getAllPost = createAsyncThunk("instagram/getAllPost", async()=>{
         throw new error(error.messege);
     }
 });
+
+export const deletePost = createAsyncThunk("instagram/deletePost", async(id)=>{
+    try {
+        const response = await axios.delete(`http://localhost:5050/post/${id}`);
+        return response.data;
+    } catch (error) {
+        throw new error(error.messege);
+    }
+});
+

@@ -2,16 +2,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { timeAgo } from "../../utils/helper";
 import { FaRegHeart,FaTelegramPlane } from "react-icons/fa";
 import { IoChatbubbleOutline } from "react-icons/io5";
-import { actionModalOpen } from "../../APP/Feature/Instagram/instagramSlice";
+import { actionModalOpen, incrementCounter } from "../../APP/Feature/Instagram/instagramSlice";
+import { deletePost } from "../../APP/Feature/Instagram/instagramApiSlice";
 
 const TimeLine = () => {
     const dispatch = useDispatch();
-    const {instagrampost} = useSelector((state)=>state.instagram);
+    const {instagrampost,counter} = useSelector((state)=>state.instagram);
     
     const handlepostMenu = (id) => {
       dispatch(actionModalOpen());
-
+      dispatch(deletePost(id));
     }
+
+
   return (
     <>
     {[...instagrampost].reverse().map((item)=>{
@@ -54,13 +57,13 @@ const TimeLine = () => {
               <div className="px-4 py-3">
                 <div className="flex items-center">
                   <button className="text-black focus:outline-none flex justify-normal gap-1">
-                    <span className="text-xl"><FaRegHeart/></span>
+                    <span className="text-xl" onClick={()=>dispatch(incrementCounter())}><FaRegHeart/></span>
                     <span className="text-xl"><FaTelegramPlane/></span>
                     <span className="text-xl"><IoChatbubbleOutline/></span>
                   </button>
                 </div>
                 <div className="reactionCounter mt-2 text-sm text-gray-700">
-                  <span className="font-semibold">140 likes</span>
+                  <span className="font-semibold">{counter} Like</span>
                 </div>
                 <div className="mt-2 text-base text-gray-700">
                   <span className="font-semibold">{item.caption}</span>

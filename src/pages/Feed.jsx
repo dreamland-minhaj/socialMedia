@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux"
 import { actionModalClose, actionModalOpen, loadingStart, modalClose, modalOpen } from "../APP/Feature/Instagram/instagramSlice"
 import ModalPopUp from "../components/Modal/ModalPopUp"
 import { useState } from "react";
-import { createNewPost } from "../APP/Feature/Instagram/instagramApiSlice";
+import { createNewPost, deletePost } from "../APP/Feature/Instagram/instagramApiSlice";
 import { cloudImageUpload } from "../utils/helper";
 import Loader from "../components/Loader/Loader";
 import ActionModal from "../components/Modal/ActionModal";
@@ -10,6 +10,7 @@ import Reels from "../components/Reels/Reels";
 import LeftSidebar from "../Layouts/LeftSidebar/LeftSidebar";
 import RightSidebar from "../Layouts/RightSidebar/RightSidebar";
 import TimeLine from "../Layouts/TimeLine/TimeLine";
+import Swal from "sweetalert2";
 
 
 
@@ -43,6 +44,26 @@ const handleDataSubmit = async(e) => {
   dispatch(createNewPost({...input, photo: fileData.secure_url}));
   dispatch(modalClose());
 
+}
+const handleDeletePost = () => {
+  Swal.fire({
+    title: "Are you sure?",
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then((result) => {
+    if (result.isConfirmed) {
+      dispatch(deletePost());
+      Swal.fire({
+        title: "Deleted!",
+        text: "Your file has been deleted.",
+        icon: "success"
+      });
+    }
+  });
 }
 
   return (
@@ -88,7 +109,7 @@ const handleDataSubmit = async(e) => {
         {/* Modal Content */}
         <div className="flex flex-col">
           {/* Modal Buttons */}
-          <button className="py-3 border-b border-gray-300 text-red-500 hover:bg-gray-100">
+          <button onClick={()=>handleDeletePost()} className="py-3 border-b border-gray-300 text-red-500 hover:bg-gray-100">
             Delete
           </button>
           <button className="py-3 border-b border-gray-300 hover:bg-gray-100">
